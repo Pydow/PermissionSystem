@@ -1,0 +1,6 @@
+name: PermissionSystem
+version: 1.0.0-SNAPSHOT
+api: 2.0.0
+author: Mundschutziii
+main: net.lldv.pydow.permissionsystem.PermissionSystem
+description: Ein Rechte-System für Recht und Ordnung!
