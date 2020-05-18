@@ -1,7 +1,6 @@
 prefix: "§8» §ePerms §8| §7"
 no-permission: "&cDazu hast du keine Rechte."
 
-your-group-changed: "&aDein Rang wurde geändert. Damit der Rang aktiviert wird, betrete den Server bitte einmal neu."
 user-group-set: "&aDer Spieler &7[0] &abesitzt nun die Gruppe &7[1]&a."
 group-not-found: "&cDie Gruppe &7[0] &ckonnte nicht gefunden werden."
 group-already-exists: "&cDieser Rang existiert bereits."
@@ -23,3 +22,5 @@ parent-group-set: "&aDem Rang &7[0] &awurde das Parent &7[1] &ahinzugefügt."
 parent-group-removed: "&aDem Rang &7[0] &awurde das Parent &7[1] &aentfernt."
 parent-already-exists: "&cDas Parent wurde bereits hinzugefügt."
 parent-not-found: "&cDas Parent konnte nicht gefunden werden."
+notify-info: "&fNeue Aktivität erkannt: &e[0]"
+notify-details: "&f> &7[0]"

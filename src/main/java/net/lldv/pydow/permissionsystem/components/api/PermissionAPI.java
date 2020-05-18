@@ -1,11 +1,13 @@
 package net.lldv.pydow.permissionsystem.components.api;
 
 import cn.nukkit.Server;
+import cn.nukkit.permission.PermissionAttachment;
 import cn.nukkit.player.Player;
 import com.mongodb.client.MongoCollection;
 import net.lldv.pydow.permissionsystem.components.api.database.MongoDB;
 import net.lldv.pydow.permissionsystem.components.data.Group;
 import net.lldv.pydow.permissionsystem.components.data.User;
+import net.lldv.pydow.permissionsystem.components.event.PlayerGroupChangeEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -19,6 +21,7 @@ public class PermissionAPI {
     private static String defaultGroup;
     public static HashMap<String, Group> cachedGroups = new HashMap<>();
     public static HashMap<String, User> cachedPlayer = new HashMap<>();
+    public static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
 
     public static void createUserData(String user) {
         List<String> list = new ArrayList<>();
@@ -155,6 +158,8 @@ public class PermissionAPI {
             Bson newEntry = new Document("permissions", list);
             Bson newEntrySet = new Document("$set", newEntry);
             MongoDB.getUserCollection().updateOne(new Document("user", user), newEntrySet);
+            Player player = Server.getInstance().getPlayer(user);
+            if (player != null) attachments.get(user).setPermission(permission, true);
             cachedPlayer.remove(user);
             cachedPlayer.put(user, new User(user, found.getString("group"), found.getLong("duration"), found.getList("permissions", String.class)));
         });
@@ -170,6 +175,8 @@ public class PermissionAPI {
             Bson newEntry = new Document("permissions", list);
             Bson newEntrySet = new Document("$set", newEntry);
             MongoDB.getUserCollection().updateOne(new Document("user", user), newEntrySet);
+            Player player = Server.getInstance().getPlayer(user);
+            if (player != null) attachments.get(user).unsetPermission(permission);
             cachedPlayer.remove(user);
             cachedPlayer.put(user, new User(user, found.getString("group"), found.getLong("duration"), found.getList("permissions", String.class)));
         });
@@ -207,6 +214,7 @@ public class PermissionAPI {
 
     public static void setGroup(String user, String group, int time) {
         CompletableFuture.runAsync(() -> {
+            String oldGroup = cachedPlayer.get(user).getGroup();
             Document document = new Document("user", user);
             Document found = MongoDB.getUserCollection().find(document).first();
             assert found != null;
@@ -221,6 +229,7 @@ public class PermissionAPI {
                 if (time != -1) end = System.currentTimeMillis() + time * 1000L;
                 else end = -1;
                 cachedPlayer.put(user, new User(user, group, end, found.getList("permissions", String.class)));
+                player.getServer().getPluginManager().callEvent(new PlayerGroupChangeEvent(player, cachedGroups.get(oldGroup), cachedGroups.get(group)));
             }
         });
     }

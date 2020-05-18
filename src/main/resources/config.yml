@@ -1,5 +1,5 @@
 MongoDB:
   Database: "permissionsystem"
-  Uri: "mongodb+srv://root:5kpYrtjVnsCE6q6I@testserver-ujdt6.mongodb.net/test"
+  Uri: "mongodb+srv://root:X4iZW7w0FSVbZ44i@testserver-ujdt6.mongodb.net/test"
 
-DefaultGroup: "spieler"
+DefaultGroup: "Spieler"
